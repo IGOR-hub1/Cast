@@ -7,7 +7,7 @@ window.XBUNNY_CAST_PLAYBACK_CATALOG = Object.freeze({
     //   animeId: 'anime_123', episodeId: 'ep_01', sourceId: 'fonte_publica',
     //   title: 'Nome do anime', episodeTitle: 'Episódio 1',
     //   externalPlaybackAllowed: true,
-    //   allowedCastOrigins: ['https://cast.seu-dominio.com'],
+    //   allowedCastOrigins: ['https://cast-anime.vercel.app'],
     //   allowedMediaOrigins: ['https://midia.autorizada.example'],
     //   kind: 'mp4',
     //   variants: [{ label: '720p', url: 'https://midia.autorizada.example/anime/ep01-720.mp4' }]
