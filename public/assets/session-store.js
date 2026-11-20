@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const codePattern = /^[A-Za-z0-9_-]{32}$/;
+  const codePattern = /^(?:[1-9][0-9]{6}|[A-Za-z0-9_-]{32})$/;
   const idPattern = /^[A-Za-z0-9_-]{1,128}$/;
   const maxLifetimeMs = 24 * 60 * 60 * 1000;
   const defaultLifetimeMs = 2 * 60 * 60 * 1000;
@@ -25,11 +25,11 @@
 
   function makeCode() {
     if (!window.crypto || !window.crypto.getRandomValues) throw new Error('Gerador seguro indisponível.');
-    const bytes = new Uint8Array(24);
-    window.crypto.getRandomValues(bytes);
-    let binary = '';
-    for (const byte of bytes) binary += String.fromCharCode(byte);
-    return window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const sample = new Uint32Array(1);
+    const range = 9_000_000;
+    const limit = Math.floor(4_294_967_296 / range) * range;
+    do { window.crypto.getRandomValues(sample); } while (sample[0] >= limit);
+    return String(1_000_000 + sample[0] % range);
   }
 
   async function serverNow(db) {
@@ -54,19 +54,23 @@
     const db = database();
     const user = currentUser();
     await user.getIdToken(true);
-    const id = makeCode();
-    const payload = {
-      id,
-      ownerUid: user.uid,
-      animeId,
-      episodeId,
-      sourceId,
-      createdAt: firebase.database.ServerValue.TIMESTAMP,
-      expiresAt: Math.floor(await serverNow(db) + lifetimeMs),
-      status: 'active'
-    };
-    await db.ref('castSessions/' + id).set(payload);
-    return { id, url: window.location.origin + '/assistir/' + id, expiresAt: payload.expiresAt };
+    const expiresAt = Math.floor(await serverNow(db) + lifetimeMs);
+    let id;
+    let committed = false;
+    for (let attempt = 0; attempt < 8 && !committed; attempt++) {
+      id = makeCode();
+      const payload = {
+        id, ownerUid: user.uid, animeId, episodeId, sourceId,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        expiresAt, status: 'active'
+      };
+      const result = await db.ref('castSessions/' + id).transaction(function (current) {
+        return current === null ? payload : undefined;
+      }, undefined, false);
+      committed = result.committed === true;
+    }
+    if (!committed) throw new Error('Não foi possível reservar um código. Tente novamente.');
+    return { id, url: window.location.origin + '/assistir/' + id, expiresAt };
   }
 
   function validSession(value, code, now) {

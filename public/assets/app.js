@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const codePattern = /^[A-Za-z0-9_-]{32}$/;
+  const codePattern = /^(?:[1-9][0-9]{6}|[A-Za-z0-9_-]{32})$/;
   const providerPattern = /^https:\/\/serv01\.meusdoramas\.club\/#\/video\/[0-9]{1,12}\/[0-9]{1,4}\/[0-9]{1,4}\/$/;
   const year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
@@ -32,7 +32,6 @@
     document.getElementById('player-loading').hidden = state !== 'loading';
     document.getElementById('player-error').hidden = state !== 'error';
     document.getElementById('player-start').hidden = true;
-    document.getElementById('provider-source').hidden = true;
     document.getElementById('player-status').textContent = state === 'error' ? 'Reprodução indisponível' : 'Verificando link';
     if (state === 'error') {
       document.getElementById('error-title').textContent = title;
@@ -111,11 +110,7 @@
               return;
             }
             currentSessionKey = key;
-            showWatchState('ready', 'Episódio compartilhado', 'Abra o endereço original abaixo para assistir.');
-            document.getElementById('provider-url').textContent = session.iframeUrl;
-            document.getElementById('provider-open').href = session.iframeUrl;
-            document.getElementById('provider-source').hidden = false;
-            document.getElementById('player-status').textContent = 'Fonte original disponível';
+            showWatchState('error', 'Player indisponível neste domínio', 'O provedor deste episódio bloqueia a reprodução dentro do X-Bunny Cast.');
             return;
           }
           const source = window.XBunnyCastSourceResolver.resolve(session, window.XBUNNY_CAST_PLAYBACK_CATALOG, window.location.origin);
