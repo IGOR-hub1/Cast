@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b0a10">
+    <meta name="description" content="X-Bunny Cast: um espaço para assistir aos animes compartilhados pelo X-Bunny Animes.">
+    <title>X-Bunny Cast — Seus links, uma nova tela</title>
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/app.js" defer></script>
+  </head>
+  <body data-page="home">
+    <div class="site-shell">
+      <header class="site-header">
+        <a class="brand" href="/" aria-label="X-Bunny Cast, página inicial">
+          <span class="brand-mark" aria-hidden="true"><img src="/assets/favicon.svg" alt=""></span>
+          <span class="brand-name">X-Bunny <strong>Cast</strong></span>
+        </a>
+        <span class="header-label"><span class="status-dot"></span> Uma nova forma de assistir</span>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <span class="eyebrow"><span class="eyebrow-line"></span> Feito para o X-Bunny Animes</span>
+            <h1 id="hero-title">Seu anime merece <span>uma tela só dele.</span></h1>
+            <p class="hero-description">O X-Bunny Cast é o espaço de reprodução para os links compartilhados pelo aplicativo X-Bunny Animes. Simples de abrir, confortável de assistir.</p>
+            <form class="link-form" id="open-link-form" novalidate>
+              <label for="cast-link">Já recebeu um link?</label>
+              <div class="input-row">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"/></svg>
+                </span>
+                <input id="cast-link" name="link" type="text" placeholder="Cole o link ou código aqui" autocomplete="off" spellcheck="false" aria-describedby="link-help link-error">
+                <button class="button button-primary" type="submit">Abrir <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+              </div>
+              <p class="field-help" id="link-help">Use um link deste domínio no formato /assistir/CODIGO.</p>
+              <p class="field-error" id="link-error" role="alert" hidden></p>
+            </form>
+          </div>
+
+          <div class="preview-card" aria-hidden="true">
+            <div class="preview-topline"><span class="preview-brand">X-BUNNY <b>CAST</b></span><span class="preview-chip">EM BREVE</span></div>
+            <div class="preview-screen"><span class="preview-orbit orbit-one"></span><span class="preview-orbit orbit-two"></span><span class="preview-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.8a1.5 1.5 0 0 1 2.3-1.27l10 6.2a1.5 1.5 0 0 1 0 2.54l-10 6.2A1.5 1.5 0 0 1 8 18.2V5.8Z"/></svg></span></div>
+            <div class="preview-details"><span class="preview-skeleton long"></span><span class="preview-skeleton short"></span></div>
+          </div>
+        </section>
+
+        <section class="how-it-works" aria-labelledby="how-title">
+          <div class="section-heading"><span class="eyebrow">UM CAMINHO SIMPLES</span><h2 id="how-title">Do aplicativo para a sua tela.</h2></div>
+          <div class="step-grid">
+            <article class="step-card"><span class="step-number">01</span><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M10 18h4"/></svg></span><h3>Receba o link</h3><p>O X-Bunny Animes compartilha um endereço para o conteúdo.</p></article>
+            <article class="step-card"><span class="step-number">02</span><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"/></svg></span><h3>Abra no Cast</h3><p>O código do link leva você diretamente à página de reprodução.</p></article>
+            <article class="step-card"><span class="step-number">03</span><span class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="15" rx="2"/><path d="M8 22h8m-4-3v3"/></svg></span><h3>Assista quando estiver pronto</h3><p>A tela já está preparada para receber a futura integração de reprodução.</p></article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer"><span>© <span id="year"></span> X-Bunny Cast</span><span>Uma experiência X-Bunny Animes</span></footer>
+    </div>
+  </body>
+</html>
