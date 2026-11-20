@@ -10,7 +10,8 @@ const originalRules = { ...rules };
 delete originalRules.castSessions;
 delete originalRules.castAuthorizedSources;
 assert.equal(createHash('sha256').update(JSON.stringify(originalRules)).digest('hex'), 'a0f82363b08a730cc911e954584e7ab40446a08d018637cd483ed8bdbf327c9a');
-const code = 'Abcdefghijklmnopqrstuvwx12345678';
+const code = '1234567';
+const legacyCode = 'Abcdefghijklmnopqrstuvwx12345678';
 const now = 1_700_000_000_000;
 const auth = uid => ({ uid, token: { email_verified: true, auth_time: 123 } });
 const sourcePath = { anime_1: { ep_2: { primary: true } } };
@@ -47,26 +48,30 @@ function session() {
 }
 
 const node = rules.castSessions.$code;
-function write(before, after, user, root = rootData(before)) {
-  if (!evaluate(node['.write'], { data: before, newData: after, root, user })) return false;
+function write(before, after, user, root = rootData(before), sessionCode = code) {
+  if (!evaluate(node['.write'], { data: before, newData: after, root, user, extra: { $code: sessionCode } })) return false;
   if (!after) return true;
   if (!evaluate(node['.validate'], { data: before, newData: after, root, user })) return false;
   for (const [key, value] of Object.entries(after)) {
     const field = node[key] || node.$other;
     if (!field || !evaluate(field['.validate'], {
-      data: before?.[key], newData: value, root, user
+      data: before?.[key], newData: value, root, user, extra: { $code: sessionCode }
     })) return false;
   }
   return true;
 }
-function read(value, root = rootData(value)) {
-  return evaluate(node['.read'], { data: value, root });
+function read(value, root = rootData(value), sessionCode = code) {
+  return evaluate(node['.read'], { data: value, root, extra: { $code: sessionCode } });
 }
 
 const active = session();
 assert.equal(rules['.read'], false);
 assert.equal(rules.castSessions['.read'], undefined);
 assert.equal(read(active), true);
+const legacy = { ...active, id: legacyCode };
+assert.equal(read(legacy, rootData(legacy), legacyCode), true);
+assert.equal(write(null, legacy, auth('owner_1'), rootData(null), legacyCode), false);
+assert.equal(write(legacy, { ...legacy, status: 'ended' }, auth('owner_1'), rootData(legacy), legacyCode), true);
 assert.equal(read({ ...active, expiresAt: now - 1 }), true);
 assert.equal(read({ ...active, status: 'ended' }), true);
 assert.equal(read(null), true);

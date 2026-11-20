@@ -45,6 +45,11 @@ function screen(page, pathname, resolved) {
 
 let ui = screen('home', '/');
 const code = 'Abcdefghijklmnopqrstuvwx12345678';
+const shortCode = '1234567';
+ui.element('cast-link').value = shortCode;
+ui.element('open-link-form').listeners.submit({ preventDefault() {} });
+assert.equal(ui.navigation[0], '/assistir/' + shortCode);
+ui = screen('home', '/');
 ui.element('cast-link').value = 'https://cast.example/assistir/' + code;
 ui.element('open-link-form').listeners.submit({ preventDefault() {} });
 assert.equal(ui.navigation[0], '/assistir/' + code);
@@ -78,11 +83,11 @@ ui = screen('watch', '/assistir/' + code);
 ui.subscriptions[0].callback({ state: 'active', session: { animeId: 'md_126971', episodeId: 's1_e3',
   sourceId: 'serv01_iframe', iframeUrl: 'https://serv01.meusdoramas.club/#/video/126971/1/3/' } });
 assert.equal(ui.playback.loads.length, 0);
-assert.equal(ui.element('provider-source').hidden, false);
-assert.equal(ui.element('provider-url').textContent, 'https://serv01.meusdoramas.club/#/video/126971/1/3/');
-assert.equal(ui.element('provider-open').href, 'https://serv01.meusdoramas.club/#/video/126971/1/3/');
+assert.equal(ui.element('player-error').hidden, false);
+assert.equal(ui.element('error-title').textContent, 'Player indisponível neste domínio');
+assert(!ui.element('error-description').textContent.includes('serv01.meusdoramas.club'));
 ui.subscriptions[0].callback({ state: 'ended' });
-assert.equal(ui.element('provider-source').hidden, true);
+assert.equal(ui.element('watch-heading').textContent, 'Sessão encerrada');
 
 ui = screen('watch', '/assistir/%3Cscript%3E');
 assert.equal(ui.element('player-error').hidden, false);

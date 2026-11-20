@@ -21,7 +21,7 @@ const catalog = {
 let html = fs.readFileSync(path.join(root, 'assistir/index.html'), 'utf8');
 html = html.replace(/\s*<script src="https:\/\/(?:www\.gstatic\.com\/firebasejs|cdn\.jsdelivr\.net)[^"]+" defer><\/script>/g, '');
 html = html.replace('<script src="/assets/firebase-config.js" defer></script>', '<script src="/__fixture.js" defer></script>');
-html = html.replace(/\s*<script src="\/assets\/(?:session-store|playback-catalog)\.js" defer><\/script>/g, '');
+html = html.replace(/\s*<script src="\/assets\/(?:session-store|playback-catalog)\.js(?:\?v=\d+)?" defer><\/script>/g, '');
 const fixture = 'window.XBUNNY_CAST_PLAYBACK_CATALOG=' + JSON.stringify(catalog) + ';\n' +
   'window.XBunnyCastSessions={observeSession:function(code,callback){setTimeout(function(){callback({state:"active",session:' + JSON.stringify(session) + '});},50);return function(){};}};';
 

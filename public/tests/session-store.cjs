@@ -24,6 +24,12 @@ const db = {
         calls.push(['read', key]);
         return { val: () => key === '.info/serverTimeOffset' ? 0 : records.get(key) ?? null };
       },
+      async transaction(update) {
+        const value = update(records.get(key) ?? null);
+        if (value === undefined) return { committed: false };
+        calls.push(['write', key, value]); records.set(key, value);
+        return { committed: true };
+      },
       async set(value) { calls.push(['write', key, value]); records.set(key, value); },
       async remove() { calls.push(['delete', key]); records.delete(key); },
       on(_event, callback) { calls.push(['observe', key]); callback({ val: () => records.get(key) ?? null }); },
@@ -45,13 +51,13 @@ const window = {
   setTimeout(callback) { const id = nextTimer++; timers.set(id, callback); return id; },
   clearTimeout(id) { timers.delete(id); }
 };
-vm.runInNewContext(source, { window, firebase, Uint8Array, Date, Number, String, TypeError });
+vm.runInNewContext(source, { window, firebase, Uint8Array, Uint32Array, Date, Number, String, TypeError, Math });
 const store = window.XBunnyCastSessions;
 
 (async () => {
-  const codes = new Set(Array.from({ length: 100 }, () => store.makeCode()));
-  assert.equal(codes.size, 100);
-  assert([...codes].every(code => /^[A-Za-z0-9_-]{32}$/.test(code)));
+  const codes = new Set(Array.from({ length: 20 }, () => store.makeCode()));
+  assert.equal(codes.size, 20);
+  assert([...codes].every(code => /^[1-9][0-9]{6}$/.test(code)));
 
   const created = await store.createSession({ animeId: 'anime_1', episodeId: 'ep_2', sourceId: 'primary' });
   const key = 'castSessions/' + created.id;
