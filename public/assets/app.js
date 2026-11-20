@@ -110,7 +110,12 @@
               return;
             }
             currentSessionKey = key;
-            showWatchState('error', 'Player indisponível neste domínio', 'O provedor deste episódio bloqueia a reprodução dentro do X-Bunny Cast.');
+            showWatchState('loading', 'Abrindo o episódio', 'Redirecionando para o player original.');
+            try {
+              window.location.replace(session.iframeUrl);
+            } catch (_) {
+              showWatchState('error', 'Não foi possível abrir o player', 'Tente abrir o link de compartilhamento em outro navegador.');
+            }
             return;
           }
           const source = window.XBunnyCastSourceResolver.resolve(session, window.XBUNNY_CAST_PLAYBACK_CATALOG, window.location.origin);
