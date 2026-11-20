@@ -86,6 +86,16 @@ assert.equal(write(active, null, auth('other_2')), false);
 assert.equal(write(null, active, auth('owner_1'), rootData(null, { revokedSessions: { owner_1: { 123: true } } })), false);
 assert.equal(write(null, active, auth('owner_1'), rootData(null, { users: { owner_1: { banned: true } } })), false);
 
+const iframe = { ...active, animeId: 'md_126971', episodeId: 's1_e3', sourceId: 'serv01_iframe',
+  iframeUrl: 'https://serv01.meusdoramas.club/#/video/126971/1/3/' };
+const withoutCatalog = rootData(null, { castAuthorizedSources: {} });
+assert.equal(write(null, iframe, auth('owner_1'), withoutCatalog), true);
+assert.equal(read(iframe, rootData(iframe, { castAuthorizedSources: {} })), true);
+assert.equal(write(iframe, { ...iframe, status: 'ended' }, auth('owner_1')), true);
+assert.equal(write(iframe, { ...iframe, iframeUrl: 'https://serv01.meusdoramas.club/#/video/126971/1/4/', status: 'ended' }, auth('owner_1')), false);
+assert.equal(write(null, { ...iframe, iframeUrl: 'https://evil.example/#/video/126971/1/3/' }, auth('owner_1'), withoutCatalog), false);
+assert.equal(write(null, { ...iframe, iframeUrl: 'https://serv01.meusdoramas.club/#/video/126971/1/3/?token=secret' }, auth('owner_1'), withoutCatalog), false);
+
 const registry = rules.castAuthorizedSources.$anime.$episode.$source;
 assert.equal(evaluate(registry['.write'], { root: rootData(), user: auth('admin_1') }), true);
 assert.equal(evaluate(registry['.write'], { root: rootData(), user: auth('owner_1') }), false);

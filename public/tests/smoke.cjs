@@ -74,6 +74,16 @@ ui.subscriptions[0].callback({ state: 'active', session: { animeId: 'anime_1', e
 assert.equal(ui.playback.loads.length, 0);
 assert.equal(ui.element('watch-heading').textContent, 'Reprodução externa indisponível');
 
+ui = screen('watch', '/assistir/' + code);
+ui.subscriptions[0].callback({ state: 'active', session: { animeId: 'md_126971', episodeId: 's1_e3',
+  sourceId: 'serv01_iframe', iframeUrl: 'https://serv01.meusdoramas.club/#/video/126971/1/3/' } });
+assert.equal(ui.playback.loads.length, 0);
+assert.equal(ui.element('provider-source').hidden, false);
+assert.equal(ui.element('provider-url').textContent, 'https://serv01.meusdoramas.club/#/video/126971/1/3/');
+assert.equal(ui.element('provider-open').href, 'https://serv01.meusdoramas.club/#/video/126971/1/3/');
+ui.subscriptions[0].callback({ state: 'ended' });
+assert.equal(ui.element('provider-source').hidden, true);
+
 ui = screen('watch', '/assistir/%3Cscript%3E');
 assert.equal(ui.element('player-error').hidden, false);
 assert.equal(ui.subscriptions.length, 0);
