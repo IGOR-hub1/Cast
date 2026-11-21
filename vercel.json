@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "rewrites": [
+    { "source": "/assistir/:codigo", "destination": "/api/watch" },
+    { "source": "/assistir/:codigo/", "destination": "/api/watch" }
+  ]
+}
