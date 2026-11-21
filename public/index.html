@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>X-Bunny Cast</title>
+  <link rel="stylesheet" href="/assets/styles.css?v=4">
+</head>
+<body>
+  <div class="site-shell">
+    <div class="site-header"><a class="brand" href="/">X-Bunny <strong>Cast</strong></a></div>
+    <main class="hero">
+      <h1>Assistir na sua tela</h1>
+      <p>Digite o código gerado no X-Bunny Animes.</p>
+      <form class="code-form" action="/api/watch" method="get">
+        <label for="code">Código de transmissão</label>
+        <div class="input-row">
+          <input id="code" name="code" type="text" inputmode="numeric" autocomplete="off" maxlength="160" placeholder="7 números">
+          <button type="submit">Abrir</button>
+        </div>
+      </form>
+      <p class="hint">Também é possível abrir o link completo de compartilhamento.</p>
+    </main>
+  </div>
+</body>
+</html>
